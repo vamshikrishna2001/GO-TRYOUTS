@@ -1,5 +1,5 @@
-so basically if you push data in a channel from a go routine that go routine
-will be blocked until the same message is read from the go routine
+so basically if you push data into a channel(A to B) from a go routine(A) that go routine
+will be blocked until the same message is read from the go routine(B)
 
 func main() {
 	var a int
