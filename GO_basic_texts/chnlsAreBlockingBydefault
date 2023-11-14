@@ -1,0 +1,105 @@
+so channels are blocking by default
+
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func main() {
+	var wg sync.WaitGroup
+	var out int
+
+	ch := make(chan int)
+
+	wg.Add(1)
+	go func(ch chan int, out *int) {
+		defer wg.Done()
+		*out = <-ch
+	}(ch, &out)
+
+	i := 10
+	ch <- i
+
+	wg.Wait()
+	fmt.Println(out)
+
+}
+
+
+the above script is basically when you put a reciever in go routine it requires complex stuff to be handled 
+
+the below script is availing the advantage of by default chnls are blocking concept 
+
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	ch := make(chan int)
+
+	go func() {
+		ch <- 12
+	}()
+
+	fmt.Println(<-ch)
+}
+
+1. The below script on line number 48 it the channles is blocking so by default it makes the main() not to stop ... 
+2. But in the above case we had to wait by using sync modules and create an external wait time
+3. assume the function is doing some hectic compuation stuff ... but we will get the data sequentially
+
+
+correction for the blocking of go routine will be there even if it is a recieving or seinding case 
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	var out int
+
+	ch := make(chan int, 1)
+
+	go func(ch chan int, out *int) {
+		*out = <-ch
+		time.Sleep(4 * time.Second)
+	}(ch, &out)
+
+	i := 10
+	ch <- i
+
+	fmt.Println(out)
+
+}
+
+
+for the above script output is zero ... since its not blocking because of buffered channel
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	var out int
+
+	ch := make(chan int)
+
+	go func(ch chan int, out *int) {
+		*out = <-ch
+		time.Sleep(4 * time.Second)
+	}(ch, &out)
+
+	i := 10
+	ch <- i
+
+	fmt.Println(out)
+
+}
+
+for the below case output is 10 ... recieve operation is blocking the go routine 

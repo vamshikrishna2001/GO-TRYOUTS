@@ -1,0 +1,44 @@
+func main() {
+	var a string
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func(a *string) {
+		defer wg.Done()
+		time.Sleep(6 * time.Second)
+		*a = "vamshi"
+	}(&a)
+
+	wg.Wait()
+	fmt.Println(a)
+
+} 
+
+1. In the above script we are not using any thing complex
+just overwrting a variable a in a go routine assuming its 
+a time consuming task
+
+2. the above script wont work if we dont we wait groups there
+wont work as in ... a wont be overwritten by the value "vamshi"
+because by default over writing here is a non blocking operation
+
+
+func main() {
+	var a string
+	ch := make(chan string)
+
+	go func() {
+		time.Sleep(6 * time.Second)
+		ch <- "vamshi"
+	}()
+
+	a = <-ch
+
+	fmt.Println(a)
+
+}
+
+1. Here in the script we are using same over writing concept 
+with channels .. but we dont need wait groups here because channels
+are by default blocking ... 
+

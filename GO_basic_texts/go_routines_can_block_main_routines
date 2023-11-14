@@ -1,0 +1,63 @@
+GO routines can block main routines 
+
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	// var out int
+
+	ch := make(chan int)
+
+	go func() {
+		time.Sleep(10 * time.Second)
+		temp := <-ch
+		fmt.Println(temp)
+	}()
+
+	i := 1000
+	ch <- i
+
+	fmt.Println("hii")
+
+}
+
+ch is between two go routines main go routine and child go routine 
+reading from the channel is a blocking operation so it will block both
+the go routines
+
+so basically if you push data in a channel from a go routine that go routine
+will be blocked until the same message is read from the go routine
+
+
+or the below script 
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	// var out int
+
+	ch := make(chan int)
+
+	go func() {
+		time.Sleep(10 * time.Second)
+		i := 1000
+		ch <- i
+
+	}()
+
+	temp := <-ch
+	fmt.Println(temp)
+
+	fmt.Println("hii")
+
+}
+
+samething with this script also .. 
