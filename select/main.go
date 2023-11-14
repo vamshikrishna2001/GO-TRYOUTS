@@ -22,8 +22,10 @@ func main() {
 	for i := 0; i < 2; i++ {
 		select {
 		case m1 := <-ch1:
+			fmt.Println("from channel 1")
 			fmt.Println(m1)
 		case m2 := <-ch2:
+			fmt.Println("from channel 2")
 			fmt.Println(m2)
 		}
 	}
