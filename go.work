@@ -1,3 +1,7 @@
-go 1.20
+go 1.21.4
 
-use ./pipeline/Fan_in&out
+use (
+	./interfaces/basic-2
+	./interfaces/basic-3
+	./pipeline/Fan_in&out
+)
