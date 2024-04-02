@@ -1,0 +1,83 @@
+TYPE ASSERTION 
+
+
+package main
+
+import "fmt"
+
+type hello interface {
+	something() string
+}
+
+type a struct {
+	d string
+}
+
+type b struct {
+	h string
+}
+
+func (A *a) something() string {
+	return "hello from a"
+}
+
+func (B *b) something() string {
+	return "b hello"
+}
+
+func main() {
+	var a_something a
+	a_something = a{"hello"}
+	fmt.Println(a_something.d)
+	fmt.Println(a_something.something())
+
+	var interface_some hello
+	interface_some = &a{"tharun"}      // Note: Use &a{} to assign pointer to interface
+	fmt.Println(interface_some.(*a).d) // This will cause a compilation error // you will have to use type assertion 
+	fmt.Println(interface_some.something())
+}
+
+NOTE :
+inorder to access the field of an instance which you have created from interface ... you need to do type assertion
+like line number 36
+
+
+
+package main
+
+import "fmt"
+
+type hi struct {
+	a interface{} // Field 'a' can hold any type of value
+}
+
+func main() {
+	fmt.Println("Hello, 世界")
+
+	// Creating a map called ran_map
+	ran_map := make(map[string]int)
+	ran_map["first"] = 0 // Setting the value of the "first" key in the map to 0
+
+	// Creating an instance of the hi struct with the 'a' field set to ran_map
+	h := hi{a: ran_map}
+	fmt.Println(h.a) // Printing the value of 'h.a', which is the map
+
+	// Updating the value associated with the "first" key in ran_map to 143
+	h.a.(map[string]int)["first"] = 143
+	fmt.Println(h.a) // Printing the updated value of 'h.a'
+}
+
+
+The key thing to note here is that the interface{} type allows you to store values of any type in the 
+hi struct. However, when you retrieve a value from it, you need to perform a type assertion to get 
+back the original type in order to access its fields or methods. In this case, you are asserting that 
+h.a holds a map with string keys and integer values, hence the type assertion (map[string]int).
+
+
+
+
+
+
+
+
+
