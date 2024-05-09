@@ -65,6 +65,8 @@ func main() {
 	// Updating the value associated with the "first" key in ran_map to 143
 	h.a.(map[string]int)["first"] = 143
 	fmt.Println(h.a) // Printing the updated value of 'h.a'
+
+	fmt.Println(h.a.(map[string]int))
 }
 
 
