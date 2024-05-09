@@ -1,0 +1,55 @@
+Type assertion is necessary for interface variables containing non-basic types like slices, maps, structs, etc., 
+because the interface variable doesn't retain the specific type information beyond the fact that it implements the 
+empty interface (interface{}).
+
+    var p interface{};
+    
+    p = map[string]int{"vamshi":18}
+
+    fmt.Println(p["vamshi"]) // this wont work 
+    
+    fmt.Println(p.(map[string]int)["vamshi"]) // you need to do this 
+
+
+
+package main
+
+import "fmt"
+
+type hi struct {
+	a interface{} // Field 'a' can hold any type of value
+}
+
+func main() {
+
+
+    var p interface{};
+    
+    p = map[string]int{"vamshi":18}
+
+    fmt.Println(p["vamshi"]) // this wont work 
+    
+    fmt.Println(p.(map[string]int)["vamshi"]) // you need to do this 
+    
+    
+    h1 := hi{a:2}
+    fmt.Println(h1.a)    
+    h1.a = 3
+    fmt.Println(h1.a) 
+    
+    
+    hmap := map[string]int{"vk":18}
+    fmt.Println(hmap["vk"])
+    h := hi{a:hmap}
+    fmt.Println(h.a.(map[string]int)["vk"]) 
+    
+    
+    hmap1 := map[string]string{"vk":"anushka"}
+    fmt.Println(hmap1["vk"])
+    h.a = hmap1
+    fmt.Println(h.a.(map[string]string)["vk"]) 
+    
+    
+}    
+
+}
